@@ -1,0 +1,43 @@
+/* 
+  Localizable.strings
+  HomeSync
+
+  Created by Loredana Gostian on 18.05.2025.
+  
+*/
+
+// Login Screen
+
+"sign_in" = "Sign In";
+"enter_email" = "Enter your email";
+"enter_password" = "Enter your password";
+"forgot_password" = "Forgot password?";
+"not_user_yet" = "Not user yet?";
+
+// Register Screen
+
+"sign_up" = "Sign Up";
+"confirm_password" = "Confirm your password";
+"already_user" = "Already user?";
+
+// Complete Profile Screen
+
+"complete_profile" = "Complete Profile";
+"enter_first_name" = "Enter your first name";
+"enter_last_name" = "Enter your last name";
+"finish" = "Finish";
+
+// Home Screen
+
+"split" = "Split";
+"home" = "Home";
+"more" = "More";
+
+// Error Messages
+"empty_fields" = "Fields cannot be empty";
+"passwords_not_match" = "Passwords do not match";
+"unknown_error" = "Unknown error";
+"email_badly_formatted" = "The email address is badly formatted.";
+"email_already_registered" = "This email is already registered.";
+"password_at_least_6_chars" = "Password should be at least 6 characters.";
+"network_error" = "Network connection error. Please try again.";

@@ -6,13 +6,32 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3A9640CC2DDA652000024116 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3A9640CB2DDA652000024116 /* FirebaseAuth */; };
+		3A9640CE2DDA652400024116 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 3A9640CD2DDA652400024116 /* FirebaseCore */; };
+		3A9640D52DDA81D100024116 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 3A9640D42DDA81D100024116 /* FirebaseFirestore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		3A30E1E22DD152D30080F649 /* HomeSync.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HomeSync.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		3A9640AF2DD9E5C000024116 /* Exceptions for "HomeSync" folder in "HomeSync" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 3A30E1E12DD152D30080F649 /* HomeSync */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3A30E1E42DD152D30080F649 /* HomeSync */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3A9640AF2DD9E5C000024116 /* Exceptions for "HomeSync" folder in "HomeSync" target */,
+			);
 			path = HomeSync;
 			sourceTree = "<group>";
 		};
@@ -23,6 +42,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A9640CE2DDA652400024116 /* FirebaseCore in Frameworks */,
+				3A9640CC2DDA652000024116 /* FirebaseAuth in Frameworks */,
+				3A9640D52DDA81D100024116 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -33,6 +55,7 @@
 			isa = PBXGroup;
 			children = (
 				3A30E1E42DD152D30080F649 /* HomeSync */,
+				3A9640CA2DDA652000024116 /* Frameworks */,
 				3A30E1E32DD152D30080F649 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +66,13 @@
 				3A30E1E22DD152D30080F649 /* HomeSync.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		3A9640CA2DDA652000024116 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -65,6 +95,9 @@
 			);
 			name = HomeSync;
 			packageProductDependencies = (
+				3A9640CB2DDA652000024116 /* FirebaseAuth */,
+				3A9640CD2DDA652400024116 /* FirebaseCore */,
+				3A9640D42DDA81D100024116 /* FirebaseFirestore */,
 			);
 			productName = HomeSync;
 			productReference = 3A30E1E22DD152D30080F649 /* HomeSync.app */;
@@ -94,6 +127,9 @@
 			);
 			mainGroup = 3A30E1D92DD152D30080F649;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				3A9640C92DDA645300024116 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3A30E1E32DD152D30080F649 /* Products */;
 			projectDirPath = "";
@@ -250,7 +286,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = XUD2Z2SB9J;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = HomeSync/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -289,7 +326,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = XUD2Z2SB9J;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = HomeSync/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -339,6 +377,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3A9640C92DDA645300024116 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.12.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3A9640CB2DDA652000024116 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3A9640C92DDA645300024116 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		3A9640CD2DDA652400024116 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3A9640C92DDA645300024116 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		3A9640D42DDA81D100024116 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3A9640C92DDA645300024116 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3A30E1DA2DD152D30080F649 /* Project object */;
 }

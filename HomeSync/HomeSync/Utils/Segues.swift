@@ -8,4 +8,6 @@
 enum Segues: String {
     case loginSegue
     case registerSegue
+    case homeSegue
+    case completeProfileSegue
 }

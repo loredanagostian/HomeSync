@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "closure #1 in RegisterScreen.signUp():RegisterScreen.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "authService.authError ">
+            </PersistentString>
+            <PersistentString
+               value = "authService">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ContentView.init():ContentView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Auth.auth().currentUser">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
