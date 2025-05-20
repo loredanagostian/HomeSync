@@ -9,16 +9,103 @@ import SwiftUI
 
 struct FidelityCardsView: View {
     let cards: [(logo: Image, barcode: Image)]
+    @State private var currentIndex: Int = 1
+    @GestureState private var dragOffset: CGFloat = 0
+
+    var limitedCards: [(logo: Image, barcode: Image)] {
+        Array(cards.prefix(5))
+    }
+
+    let cardWidth: CGFloat = 260
+    let spacing: CGFloat = 5
 
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 16) {
-                ForEach(0..<cards.count, id: \.self) { index in
-                    FidelityCardView(cardImage: cards[index].logo,
-                                     barcodeImage: cards[index].barcode)
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                HStack(alignment: .center, spacing: 15) {
+                    GenericTextView(text: .fidelityCards, font: Fonts.semiBold.ofSize(18), textColor: .white)
+                    Image(systemName: "pencil")
+                        .resizable()
+                        .frame(width: 14, height: 14)
+                        .foregroundColor(.white)
+                }
+
+                Spacer()
+
+                HStack(spacing: 4) {
+                    GenericTextView(text: .more, font: Fonts.regular.ofSize(14), textColor: .white)
+                    Image(systemName: "arrow.right.circle")
+                        .resizable()
+                        .frame(width: 14, height: 14)
+                        .foregroundColor(.white)
                 }
             }
             .padding(.horizontal)
+            
+            Spacer()
+                .frame(height: 5)
+
+            GeometryReader { outerProxy in
+                let totalCardWidth = cardWidth + spacing
+                
+                ScrollViewReader { scrollProxy in
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: spacing) {
+                            ForEach(Array(limitedCards.enumerated()), id: \.offset) { index, card in
+                                GeometryReader { geo in
+                                    let midX = geo.frame(in: .global).midX
+                                    let screenMidX = outerProxy.frame(in: .global).midX
+                                    let distance = abs(midX - screenMidX)
+                                    let scale = max(0.85, 1 - (distance / screenMidX) * 0.2)
+
+                                    FidelityCardView(
+                                        title: "Auchan",
+                                        headerColor: .red,
+                                        barcodeText: "A4583B14"
+                                    )
+                                        .scaleEffect(scale)
+                                        .opacity(Double(scale))
+                                        .animation(.easeOut(duration: 0.25), value: scale)
+                                        .onTapGesture {
+                                            withAnimation(.easeOut(duration: 0.35)) {
+                                                currentIndex = index
+                                                scrollProxy.scrollTo(index, anchor: .center)
+                                            }
+                                        }
+                                }
+                                .frame(width: cardWidth, height: 150)
+                                .id(index)
+                            }
+                        }
+                        .padding(.horizontal, (outerProxy.size.width - cardWidth) / 2)
+                        .gesture(
+                            DragGesture()
+                                .updating($dragOffset) { value, state, _ in
+                                    state = value.translation.width
+                                }
+                                .onEnded { value in
+                                    let offset = -value.translation.width
+                                    let threshold: CGFloat = totalCardWidth / 3
+                                    if offset > threshold, currentIndex < limitedCards.count - 1 {
+                                        currentIndex += 1
+                                    } else if offset < -threshold, currentIndex > 0 {
+                                        currentIndex -= 1
+                                    }
+
+                                    withAnimation(.easeOut(duration: 0.35)) {
+                                        scrollProxy.scrollTo(currentIndex, anchor: .center)
+                                    }
+                                }
+                        )
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                scrollProxy.scrollTo(currentIndex, anchor: .center)
+                            }
+                        }
+                    }
+                }
+            }
+            .frame(height: 180)
         }
     }
 }

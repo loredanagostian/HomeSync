@@ -6,36 +6,54 @@
 //
 
 import SwiftUI
+import CoreImage.CIFilterBuiltins
 
 struct FidelityCardView: View {
-    let cardImage: Image
-    let barcodeImage: Image
+    let title: String
+    let headerColor: Color
+    let barcodeText: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            cardImage
-                .resizable()
-                .scaledToFit()
-                .frame(height: 40)
-                .padding(.top, 16)
-                .padding(.horizontal, 16)
+        VStack {
+            ZStack {
+                headerColor
+                    .frame(height: 30)
+                    .cornerRadius(15, corners: [.topLeft, .topRight])
 
+                GenericTextView(text: title, font: Fonts.semiBold.ofSize(14), textColor: .white)
+            }
+            
             Spacer()
 
-            barcodeImage
-                .resizable()
-                .scaledToFit()
-                .frame(height: 40)
-                .padding(.horizontal, 16)
-                .padding(.bottom, 16)
+            if let barcodeImage = generateBarcode(from: barcodeText) {
+                Image(uiImage: barcodeImage)
+                    .resizable()
+                    .interpolation(.none)
+                    .scaledToFit()
+//                    .frame(height: 60)
+            }
+            
+            GenericTextView(text: barcodeText, font: Fonts.regular.ofSize(12), textColor: .appDark)
+
+            Spacer()
         }
-        .frame(width: 200, height: 120)
-        .background(Color.appMediumDark)
-        .cornerRadius(16)
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.white.opacity(0.05), lineWidth: 1)
-        )
-        .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
+        .frame(width: 260, height: 140)
+        .background(Color.white)
+        .cornerRadius(15)
+    }
+
+    func generateBarcode(from string: String) -> UIImage? {
+        let context = CIContext()
+        let filter = CIFilter.code128BarcodeGenerator()
+        let data = Data(string.utf8)
+        filter.message = data
+
+        if let outputImage = filter.outputImage {
+            if let cgImage = context.createCGImage(outputImage, from: outputImage.extent) {
+                return UIImage(cgImage: cgImage).resized(to: CGSize(width: 300, height: 100))
+            }
+        }
+        
+        return nil
     }
 }

@@ -8,43 +8,39 @@
 import SwiftUI
 
 struct TopHeaderView: View {
-    var userName: String = "Lore Gostian"
+    var userName = "Lore Gostian"
+    var homeName = "HomeName"
 
     var body: some View {
-        HStack(alignment: .center) {
-            Text(userInitials(from: userName))
-                .font(Fonts.medium.ofSize(20))
-                .foregroundColor(.white)
-                .frame(width: 50, height: 50)
-                .background(.appPurple)
-                .clipShape(Circle())
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Good evening,")
-                    .font(Fonts.light.ofSize(20))
+        ZStack {
+            // Centered home name
+            HStack(spacing: 4) {
+                Spacer()
+                GenericTextView(text: homeName, font: Fonts.bold.ofSize(18), textColor: .white)
+                Image(systemName: "chevron.down")
                     .foregroundColor(.white)
-
-                Text(userName.components(separatedBy: " ").first ?? userName)
-                    .font(Fonts.medium.ofSize(20))
-                    .foregroundColor(.white)
+                Spacer()
             }
 
-            Spacer()
+            HStack {
+                Text(userInitials(from: userName))
+                    .font(Fonts.medium.ofSize(20))
+                    .foregroundColor(.white)
+                    .frame(width: 50, height: 50)
+                    .background(.appPurple)
+                    .clipShape(Circle())
 
-            HStack(spacing: 12) {
-                CircularIconButton(systemIconName: "square.grid.2x2") {
-                    // Handle grid/menu action
-                }
+                Spacer()
 
-                CircularIconButton(systemIconName: "bell.badge") {
-                    // Handle grid/menu action
+                HStack(spacing: 12) {
+                    CircularIconButton(systemIconName: "square.grid.2x2") {}
+                    CircularIconButton(systemIconName: "bell.badge") {}
                 }
             }
         }
         .padding(.horizontal)
     }
 
-    // Helper to extract initials
     private func userInitials(from name: String) -> String {
         let components = name.components(separatedBy: " ")
         let initials = components.prefix(2).compactMap { $0.first?.uppercased() }

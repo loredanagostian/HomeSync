@@ -36,6 +36,7 @@ extension String {
     static let split = "split".localized
     static let home = "home".localized
     static let more = "more".localized
+    static let fidelityCards = "fidelity_cards".localized
     
     // Error Messages
     static let emptyFields = "empty_fields".localized

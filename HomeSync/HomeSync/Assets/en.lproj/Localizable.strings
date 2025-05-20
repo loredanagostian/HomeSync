@@ -32,6 +32,7 @@
 "split" = "Split";
 "home" = "Home";
 "more" = "More";
+"fidelity_cards" = "Fidelity Cards";
 
 // Error Messages
 "empty_fields" = "Fields cannot be empty";

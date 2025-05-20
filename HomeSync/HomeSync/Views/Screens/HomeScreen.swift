@@ -13,7 +13,7 @@ struct HomeScreen: View {
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
-                VStack(spacing: 24) {
+                VStack(spacing: 30) {
                     TopHeaderView()
                     FidelityCardsView(cards: [
                         (logo: Image("card_logo1"), barcode: Image("barcode1")),
@@ -26,13 +26,10 @@ struct HomeScreen: View {
 //                    UpcomingBillsView()
 //                    SettlementCardView()
                 }
-                .padding(.horizontal)
-                .padding(.top, 20)
             }
             .padding(.top, 60)
 
             GenericTabBar(selectedTab: .home)
-            .padding(.horizontal)
             .padding(.bottom, 50)
         }
         .background(Color("appDark"))
