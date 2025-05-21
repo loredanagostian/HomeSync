@@ -21,30 +21,6 @@ struct FidelityCardsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                HStack(alignment: .center, spacing: 15) {
-                    GenericTextView(text: .fidelityCards, font: Fonts.semiBold.ofSize(18), textColor: .white)
-                    Image(systemName: "pencil")
-                        .resizable()
-                        .frame(width: 14, height: 14)
-                        .foregroundColor(.white)
-                }
-
-                Spacer()
-
-                HStack(spacing: 4) {
-                    GenericTextView(text: .more, font: Fonts.regular.ofSize(14), textColor: .white)
-                    Image(systemName: "arrow.right.circle")
-                        .resizable()
-                        .frame(width: 14, height: 14)
-                        .foregroundColor(.white)
-                }
-            }
-            .padding(.horizontal)
-            
-            Spacer()
-                .frame(height: 5)
-
             GeometryReader { outerProxy in
                 let totalCardWidth = cardWidth + spacing
                 
@@ -61,17 +37,19 @@ struct FidelityCardsView: View {
                                     FidelityCardView(
                                         title: "Auchan",
                                         headerColor: .red,
-                                        barcodeText: "A4583B14"
+                                        barcodeText: "A4583B14",
+                                        height: 150,
+                                        width: 270
                                     )
-                                        .scaleEffect(scale)
-                                        .opacity(Double(scale))
-                                        .animation(.easeOut(duration: 0.25), value: scale)
-                                        .onTapGesture {
-                                            withAnimation(.easeOut(duration: 0.35)) {
-                                                currentIndex = index
-                                                scrollProxy.scrollTo(index, anchor: .center)
-                                            }
+                                    .scaleEffect(scale)
+                                    .opacity(Double(scale))
+                                    .animation(.easeOut(duration: 0.25), value: scale)
+                                    .onTapGesture {
+                                        withAnimation(.easeOut(duration: 0.35)) {
+                                            currentIndex = index
+                                            scrollProxy.scrollTo(index, anchor: .center)
                                         }
+                                    }
                                 }
                                 .frame(width: cardWidth, height: 150)
                                 .id(index)

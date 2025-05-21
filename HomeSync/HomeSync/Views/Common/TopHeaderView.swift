@@ -2,48 +2,51 @@
 //  TopHeaderView.swift
 //  HomeSync
 //
-//  Created by Loredana Gostian on 18.05.2025.
+//  Created by Loredana Gostian on 20.05.2025.
 //
 
 import SwiftUI
 
+struct IconButton {
+    let iconName: String
+    let iconAction: () -> Void
+}
+
 struct TopHeaderView: View {
-    var userName = "Lore Gostian"
-    var homeName = "HomeName"
+    var screenTitle: String
+    var icons: [IconButton]
+    var backAction: () -> Void
 
     var body: some View {
         ZStack {
-            // Centered home name
-            HStack(spacing: 4) {
-                Spacer()
-                GenericTextView(text: homeName, font: Fonts.bold.ofSize(18), textColor: .white)
-                Image(systemName: "chevron.down")
-                    .foregroundColor(.white)
-                Spacer()
-            }
-
             HStack {
-                Text(userInitials(from: userName))
-                    .font(Fonts.medium.ofSize(20))
-                    .foregroundColor(.white)
-                    .frame(width: 50, height: 50)
-                    .background(.appPurple)
-                    .clipShape(Circle())
+                Button(action: backAction) {
+                    Image(systemName: "chevron.left")
+                        .foregroundColor(.white)
+                        .font(.system(size: 18, weight: .medium))
+                }
 
                 Spacer()
 
-                HStack(spacing: 12) {
-                    CircularIconButton(systemIconName: "square.grid.2x2") {}
-                    CircularIconButton(systemIconName: "bell.badge") {}
+                HStack(spacing: 16) {
+                    ForEach(icons, id: \.iconName) { icon in
+                        Button(action: icon.iconAction) {
+                            Image(systemName: icon.iconName)
+                                .foregroundColor(.white)
+                                .font(.system(size: 20))
+                        }
+                    }
                 }
             }
-        }
-        .padding(.horizontal)
-    }
 
-    private func userInitials(from name: String) -> String {
-        let components = name.components(separatedBy: " ")
-        let initials = components.prefix(2).compactMap { $0.first?.uppercased() }
-        return initials.joined()
+            GenericTextView(
+                text: screenTitle,
+                font: Fonts.regular.ofSize(20),
+                textColor: .white
+            )
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 60)
+        .padding(.bottom, 20)
     }
 }

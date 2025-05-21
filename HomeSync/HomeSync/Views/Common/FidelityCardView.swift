@@ -12,7 +12,9 @@ struct FidelityCardView: View {
     let title: String
     let headerColor: Color
     let barcodeText: String
-
+    var height: CGFloat
+    var width: CGFloat
+    
     var body: some View {
         VStack {
             ZStack {
@@ -30,14 +32,13 @@ struct FidelityCardView: View {
                     .resizable()
                     .interpolation(.none)
                     .scaledToFit()
-//                    .frame(height: 60)
             }
             
             GenericTextView(text: barcodeText, font: Fonts.regular.ofSize(12), textColor: .appDark)
 
             Spacer()
         }
-        .frame(width: 260, height: 140)
+        .frame(width: width, height: height)
         .background(Color.white)
         .cornerRadius(15)
     }

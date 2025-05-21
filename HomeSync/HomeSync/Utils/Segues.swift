@@ -10,4 +10,6 @@ enum Segues: String {
     case registerSegue
     case homeSegue
     case completeProfileSegue
+    case fidelityCardsSegue
+    case fidelityCardSegue
 }
