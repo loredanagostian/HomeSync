@@ -22,7 +22,7 @@ struct EditCardSheet: View {
             Spacer()
         }
         .padding()
-        .background(Color(red: 10/255, green: 13/255, blue: 18/255))
+        .background(.appBlack)
     }
 }
 

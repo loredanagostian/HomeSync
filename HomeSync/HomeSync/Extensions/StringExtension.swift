@@ -36,6 +36,9 @@ extension String {
     static let split = "split".localized
     static let home = "home".localized
     static let more = "more".localized
+    static let addNewHome = "add_new_home".localized
+    static let homeName = "home_name".localized
+    static let continueButton = "continue_button".localized
     static let fidelityCards = "fidelity_cards".localized
     
     // Error Messages

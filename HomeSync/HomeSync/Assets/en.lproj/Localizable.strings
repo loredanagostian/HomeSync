@@ -32,6 +32,9 @@
 "split" = "Split";
 "home" = "Home";
 "more" = "More";
+"add_new_home" = "Add a new home";
+"home_name" = "Home name";
+"continue_button" = "Continue";
 "fidelity_cards" = "Fidelity Cards";
 
 // Error Messages
