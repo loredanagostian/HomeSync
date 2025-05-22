@@ -89,15 +89,44 @@ struct CompleteProfileScreen: View {
         let userData: [String: Any] = [
             "firstName": firstName,
             "lastName": lastName,
-            "email": user.email ?? ""
+            "email": user.email ?? "",
+            "homesId": []
         ]
 
+        // 1. Save user first
         db.collection("users").document(user.uid).setData(userData) { error in
             if let error = error {
                 print("Error saving user to Firestore: \(error.localizedDescription)")
                 withAnimation { showSnackbar = true }
-            } else {
-                segue = .homeSegue
+                return
+            }
+
+            // 2. Create home
+            var homeRef: DocumentReference? = nil
+            let homeData: [String: Any] = [
+                "name": "My Home",
+                "usersId": [user.uid],
+                "sharedPhotos": [],
+                "sharedCards": []
+            ]
+
+            homeRef = db.collection("homes").addDocument(data: homeData) { error in
+                if let error = error {
+                    print("Error creating home: \(error.localizedDescription)")
+                    return
+                }
+
+                guard let homeId = homeRef?.documentID else { return }
+
+                // 3. Update user document to include this home ID
+                db.collection("users").document(user.uid).updateData([
+                    "homesId": FieldValue.arrayUnion([homeId])
+                ]) { error in
+                    if let error = error {
+                        print("Error updating user homesId: \(error.localizedDescription)")
+                    }
+                    segue = .homeSegue
+                }
             }
         }
     }

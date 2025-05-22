@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import FirebaseAuth
+import FirebaseFirestore
 
 struct HomeEntry: Identifiable, Equatable {
-    let id = UUID()
+    let id: String
     let name: String
     let members: Int
 }
@@ -16,25 +18,22 @@ struct HomeEntry: Identifiable, Equatable {
 struct HomeScreen: View {
     @Binding var segue: Segues
     @State private var isDropdownVisible = false
-    @State private var selectedHome: HomeEntry = HomeEntry(name: "HomeName", members: 3)
-    
-    let availableHomes = [
-        HomeEntry(name: "HomeName", members: 3),
-        HomeEntry(name: "Office", members: 5),
-        HomeEntry(name: "Parents' House", members: 2),
-        HomeEntry(name: "Vacation House", members: 1)
-    ]
+    @State private var availableHomes: [HomeEntry] = []
+    @State private var selectedHome: HomeEntry? = nil
 
     var body: some View {
         ZStack(alignment: .top) {
             VStack(spacing: 0) {
                 ScrollView {
                     VStack(spacing: 30) {
-                        TopHeaderHomeView(
-                            isDropdownVisible: $isDropdownVisible, userName: "Lore Gostian",
-                            homeName: selectedHome.name,
-                            selectedHomeCallback: { selectedHome = $0 }
-                        )
+                        if let selected = selectedHome {
+                            TopHeaderHomeView(
+                                isDropdownVisible: $isDropdownVisible,
+                                userName: "Lore Gostian",
+                                homeName: selected.name,
+                                selectedHomeCallback: { selectedHome = $0 }
+                            )
+                        }
 
                         self.initFidelityCardsSection() // <== Add self
                     }
@@ -48,14 +47,23 @@ struct HomeScreen: View {
             .ignoresSafeArea(edges: .bottom)
 
             if isDropdownVisible {
-                DropdownOverlay(
-                    homes: availableHomes,
-                    selectedHome: $selectedHome,
-                    isVisible: $isDropdownVisible
-                )
-                .transition(.opacity.combined(with: .move(edge: .top)))
-                .zIndex(1)
+                if isDropdownVisible, let selected = selectedHome {
+                    DropdownOverlay(
+                        homes: $availableHomes,
+                        selectedHome: Binding(get: {
+                            selected
+                        }, set: { newValue in
+                            self.selectedHome = newValue
+                        }),
+                        isVisible: $isDropdownVisible
+                    )
+                    .transition(.opacity.combined(with: .move(edge: .top)))
+                    .zIndex(1)
+                }
             }
+        }
+        .onAppear {
+            fetchUserHomes()
         }
     }
 
@@ -95,5 +103,41 @@ struct HomeScreen: View {
             }
         }
         .padding(.horizontal)
+    }
+    
+    private func fetchUserHomes() {
+        guard let userId = Auth.auth().currentUser?.uid else {
+            print("User not authenticated")
+            return
+        }
+
+        let db = Firestore.firestore()
+        db.collection("homes")
+            .whereField("usersId", arrayContains: userId)
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error fetching homes: \(error.localizedDescription)")
+                    return
+                }
+
+                guard let documents = snapshot?.documents else { return }
+
+                let fetchedHomes: [HomeEntry] = documents.compactMap { doc in
+                    let data = doc.data()
+                    guard let name = data["name"] as? String,
+                          let usersId = data["usersId"] as? [String] else {
+                        return nil
+                    }
+
+                    return HomeEntry(id: doc.documentID, name: name, members: usersId.count)
+                }
+
+                self.availableHomes = fetchedHomes
+
+                // Default select first home
+                if let first = fetchedHomes.first {
+                    self.selectedHome = first
+                }
+            }
     }
 }

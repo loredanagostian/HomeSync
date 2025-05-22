@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import FirebaseAuth
+import FirebaseFirestore
 
 struct TopHeaderHomeView: View {
     @Binding var isDropdownVisible: Bool
@@ -44,7 +46,7 @@ struct TopHeaderHomeView: View {
                     CircularIconButton(systemIconName: "bell.badge") {}
                 }
             }
-            }
+        }
         .padding(.horizontal)
     }
 
@@ -56,7 +58,7 @@ struct TopHeaderHomeView: View {
 }
 
 struct DropdownOverlay: View {
-    let homes: [HomeEntry]
+    @Binding var homes: [HomeEntry]
     @Binding var selectedHome: HomeEntry
     @Binding var isVisible: Bool
     @State private var isAddingNewHome = false
@@ -143,8 +145,37 @@ struct DropdownOverlay: View {
 
                    Spacer()
 
-                   GenericButton(title: .continueButton, action: {})
-                       .frame(maxWidth: .infinity)
+                    GenericButton(title: .continueButton, action: {
+                        guard let userId = Auth.auth().currentUser?.uid else {
+                            print("No authenticated user")
+                            return
+                        }
+
+                        let db = Firestore.firestore()
+                        let homeRef = db.collection("homes").document() // create a ref with a known ID
+                        let homeId = homeRef.documentID
+
+                        let homeData: [String: Any] = [
+                            "name": newHomeName,
+                            "usersId": [userId],
+                            "sharedPhotos": [],
+                            "sharedCards": []
+                        ]
+
+                        homeRef.setData(homeData) { error in
+                            if let error = error {
+                                print("Error creating home: \(error.localizedDescription)")
+                                return
+                            }
+
+                            let newHome = HomeEntry(id: homeId, name: newHomeName, members: 1)
+                            selectedHome = newHome
+                            homes.append(newHome)
+                            isAddingNewHome = false
+                            isVisible = false
+                        }
+                    })
+                    .frame(maxWidth: .infinity)
                 }
                 .padding(24)
                 .background(.appBlack)
