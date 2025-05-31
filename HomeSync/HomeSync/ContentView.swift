@@ -11,9 +11,13 @@ import FirebaseAuth
 struct ContentView: View {
     @EnvironmentObject var authService: AuthService
     @State var segue: Segues = .loginSegue
+    @State var cardName: String = ""
+    @State var barcodeString: String = ""
+    @State var homeId: String = ""
+    @State var fidelityCard: FidelityCardItem = FidelityCardItem(backgroundColorHex: "", cardNumber: "", storeName: "")
+    @State var navigateToHome: Bool = false
     
     init() {
-       // Determine initial screen based on auth state
        if Auth.auth().currentUser != nil {
            _segue = State(initialValue: .homeSegue)
        } else {
@@ -32,16 +36,25 @@ struct ContentView: View {
                 RegisterScreen(segue: $segue)
                 
             case .homeSegue:
-                HomeScreen(segue: $segue)
+                HomeScreen(segue: $segue, homeId: $homeId, fidelityCard: $fidelityCard, navigateToHome: $navigateToHome)
                 
             case .completeProfileSegue:
                 CompleteProfileScreen(segue: $segue)
                 
             case .fidelityCardsSegue:
-                FidelityCardsScreen(segue: $segue)
+                FidelityCardsScreen(segue: $segue, barcodeString: $barcodeString, homeId: $homeId, fidelityCard: $fidelityCard, navigateToHome: $navigateToHome)
                 
             case .fidelityCardSegue:
-                FidelityCardScreen(segue: $segue, cardName: .constant("Auchan"))
+                FidelityCardScreen(segue: $segue, fidelityCard: $fidelityCard, navigateToHome: $navigateToHome, homeId: $homeId)
+                
+            case .addNewFidelityCardSegue:
+                AddFidelityCardScreen(segue: $segue, barcodeString: $barcodeString, homeId: $homeId)
+                
+            case .editFidelityCardSegue:
+                EditFidelityCardScreen(segue: $segue, homeId: $homeId, fidelityCard: $fidelityCard)
+                
+            case .cardPhotosSegue:
+                CardPhotosScreen(segue: $segue, fidelityCard: $fidelityCard, homeId: $homeId)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

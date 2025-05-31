@@ -37,6 +37,27 @@
 "continue_button" = "Continue";
 "fidelity_cards" = "Fidelity Cards";
 
+// Fidelity Cards
+"scan_barcode" = "Scan your fidelity card barcode";
+"card_number" = "Card number";
+"store_name" = "Store name";
+"add_new_fidelity_card" = "Add a new fidelity card";
+"choose_card_color" = "Choose a card color";
+"edit_card" = "Edit card";
+"photos" = "Photos";
+"save_button" = "Save";
+"card_photos" = "Card photos";
+"take_photo" = "Take photo";
+"choose_gallery" = "Choose from Gallery";
+"add_front_photo" = "Add front photo";
+"add_back_photo" = "Add back photo";
+"delete_button" = "Delete";
+"cancel_button" = "Cancel";
+"delete_card" = "Delete card?";
+"delete_card_question" = "Are you sure you want to remove this card from your shared cards?";
+"delete_photo" = "Delete photo?";
+"delete_photo_question" = "Are you sure you want to remove this photo from your card?";
+
 // Error Messages
 "empty_fields" = "Fields cannot be empty";
 "passwords_not_match" = "Passwords do not match";

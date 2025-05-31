@@ -16,3 +16,12 @@ extension UIImage {
         return resized ?? self
     }
 }
+
+extension PhotoPicker.SourceType: Identifiable {
+    var id: String {
+        switch self {
+        case .camera: return "camera"
+        case .photoLibrary: return "photoLibrary"
+        }
+    }
+}

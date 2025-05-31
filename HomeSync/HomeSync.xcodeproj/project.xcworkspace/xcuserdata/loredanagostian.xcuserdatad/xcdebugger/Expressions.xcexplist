@@ -3,6 +3,60 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "ContentView.init():ContentView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "Auth.auth().currentUser">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in closure #1 in FidelityCardsScreen.loadFidelityCards():FidelityCardsScreen.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "$0[&quot;colorHex&quot;] as? String">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #3 in closure #1 in closure #1 in closure #1 in closure #1 in FidelityCardsView.body.getter:FidelityCardsView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "currentIndex">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in closure #1 in closure #1 in EditFidelityCardScreen.body.getter:EditFidelityCardScreen.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "fidelityCard">
+            </PersistentString>
+            <PersistentString
+               value = "preset.hex.lowercased()">
+            </PersistentString>
+            <PersistentString
+               value = "selectedColorHex.lowercased()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #2 in CardPhotosScreen.body.getter:CardPhotosScreen.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "isCamera">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "EditFidelityCardScreen.loadResources():EditFidelityCardScreen.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "fidelityCard">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in RegisterScreen.signUp():RegisterScreen.swift">
          <PersistentStrings>
             <PersistentString
@@ -14,10 +68,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "ContentView.init():ContentView.swift">
+         contextName = "closure #4 in closure #1 in closure #1 in closure #1 in closure #1 in FidelityCardsListView.body.getter:FidelityCardsListView.swift">
          <PersistentStrings>
             <PersistentString
-               value = "Auth.auth().currentUser">
+               value = "cards">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

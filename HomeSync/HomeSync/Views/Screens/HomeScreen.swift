@@ -17,9 +17,13 @@ struct HomeEntry: Identifiable, Equatable {
 
 struct HomeScreen: View {
     @Binding var segue: Segues
+    @Binding var homeId: String
+    @Binding var fidelityCard: FidelityCardItem
+    @Binding var navigateToHome: Bool
     @State private var isDropdownVisible = false
     @State private var availableHomes: [HomeEntry] = []
     @State private var selectedHome: HomeEntry? = nil
+    @State private var previewCards: [FidelityCardItem] = []
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -35,7 +39,7 @@ struct HomeScreen: View {
                             )
                         }
 
-                        self.initFidelityCardsSection() // <== Add self
+                        self.initFidelityCardsSection()
                     }
                 }
                 .padding(.top, 60)
@@ -63,19 +67,20 @@ struct HomeScreen: View {
             }
         }
         .onAppear {
-            fetchUserHomes()
+            fetchUserHomesAndFidelityCards()
+        }
+        .onChange(of: selectedHome) {
+            if let newHome = selectedHome {
+                homeId = newHome.id
+                fetchPreviewSharedCards(for: newHome.id)
+            }
         }
     }
 
     private func initFidelityCardsSection() -> some View {
         VStack(alignment: .leading, spacing: 20) {
             initSectionView(sectionTitle: .fidelityCards)
-
-            FidelityCardsView(cards: [
-                (logo: Image("card_logo1"), barcode: Image("barcode1")),
-                (logo: Image("card_logo2"), barcode: Image("barcode2")),
-                (logo: Image("card_logo3"), barcode: Image("barcode3"))
-            ])
+            FidelityCardsListView(cards: $previewCards, fidelityCard: $fidelityCard, segue: $segue, navigateToHome: $navigateToHome)
         }
     }
 
@@ -83,10 +88,10 @@ struct HomeScreen: View {
         HStack {
             HStack(alignment: .top, spacing: 15) {
                 GenericTextView(text: sectionTitle, font: Fonts.semiBold.ofSize(20), textColor: .white)
-                Image(systemName: "pencil")
-                    .resizable()
-                    .frame(width: 18, height: 18)
-                    .foregroundColor(.white)
+//                Image(systemName: "pencil")
+//                    .resizable()
+//                    .frame(width: 18, height: 18)
+//                    .foregroundColor(.white)
             }
 
             Spacer()
@@ -105,7 +110,7 @@ struct HomeScreen: View {
         .padding(.horizontal)
     }
     
-    private func fetchUserHomes() {
+    private func fetchUserHomesAndFidelityCards() {
         guard let userId = Auth.auth().currentUser?.uid else {
             print("User not authenticated")
             return
@@ -137,7 +142,39 @@ struct HomeScreen: View {
                 // Default select first home
                 if let first = fetchedHomes.first {
                     self.selectedHome = first
+                    homeId = first.id
+                    
+                    fetchPreviewSharedCards(for: homeId)
                 }
             }
     }
+    
+    private func fetchPreviewSharedCards(for homeId: String) {
+        let db = Firestore.firestore()
+
+        db.collection("homes")
+            .document(homeId)
+            .getDocument { snapshot, error in
+                if let error = error {
+                    print("Error fetching sharedCards: \(error.localizedDescription)")
+                    return
+                }
+
+                guard let data = snapshot?.data(),
+                      let sharedCards = data["sharedCards"] as? [[String: Any]] else {
+                    return
+                }
+
+                let firstThree = Array(sharedCards.prefix(3))
+
+                self.previewCards = firstThree.map { cardDict in
+                    FidelityCardItem(
+                        backgroundColorHex: cardDict["colorHex"] as? String ?? "#FFFFFF",
+                        cardNumber: cardDict["cardNumber"] as? String ?? "Unknown",
+                        storeName: cardDict["storeName"] as? String ?? "Unknown"
+                    )
+                }
+            }
+    }
+
 }

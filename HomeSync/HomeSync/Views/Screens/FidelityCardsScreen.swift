@@ -6,33 +6,18 @@
 //
 
 import SwiftUI
-
-struct FidelityCardItem: Identifiable {
-    let id = UUID()
-    let title: String
-    let backgroundColor: Color
-}
+import FirebaseFirestore
 
 struct FidelityCardsScreen: View {
     @Binding var segue: Segues
-    
-    // Sample data
-    let cards: [FidelityCardItem] = [
-        .init(title: "Auchan", backgroundColor: .red),
-        .init(title: "Dr. Max", backgroundColor: .green),
-        .init(title: "SensiBlu", backgroundColor: .blue),
-        .init(title: "Carturesti", backgroundColor: .green),
-        .init(title: "Decathlon", backgroundColor: .purple),
-        .init(title: "Selgros", backgroundColor: .yellow),
-        .init(title: "OMV", backgroundColor: .green),
-        .init(title: "Carrefour", backgroundColor: .blue),
-        .init(title: "Profi", backgroundColor: .red),
-        .init(title: "Farmado", backgroundColor: .green),
-        .init(title: "Punkt", backgroundColor: .purple),
-        .init(title: "Kaufland", backgroundColor: .red)
-    ]
-    
-    // Grid layout
+    @Binding var barcodeString: String
+    @Binding var homeId: String
+    @Binding var fidelityCard: FidelityCardItem
+    @Binding var navigateToHome: Bool
+    @State private var showScanner = false
+    @State private var scannedCode: String?
+    @State private var cards: [FidelityCardItem] = []
+
     let columns = [
         GridItem(.flexible(), spacing: 15),
         GridItem(.flexible(), spacing: 15)
@@ -42,19 +27,20 @@ struct FidelityCardsScreen: View {
         VStack {
             TopHeaderView(screenTitle: .fidelityCards,
                           icons: [
-                            IconButton(iconName: "square.grid.2x2", iconAction: { print("Grid tapped") }),
-                            IconButton(iconName: "creditcard.viewfinder", iconAction: { print("Card tapped") })
+                            IconButton(iconName: "creditcard.viewfinder", iconAction: { showScanner = true })
                           ],
                           backAction: goBack)
             
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 16) {
                     ForEach(cards) { card in
-                        GenericTextView(text: card.title, font: Fonts.medium.ofSize(16), textColor: .white)
+                        GenericTextView(text: card.storeName, font: Fonts.medium.ofSize(16), textColor: .white)
                             .frame(maxWidth: .infinity, minHeight: 100)
-                            .background(card.backgroundColor)
+                            .background(Color(hex:card.backgroundColorHex))
                             .cornerRadius(12)
                             .onTapGesture {
+                                fidelityCard = card
+                                navigateToHome = false
                                 segue = .fidelityCardSegue
                             }
                     }
@@ -62,10 +48,50 @@ struct FidelityCardsScreen: View {
                 .padding(.horizontal)
             }
         }
-        .background(Color.black.edgesIgnoringSafeArea(.all))
+        .sheet(isPresented: $showScanner) {
+            BarcodeScannerWrapper { code in
+                scannedCode = code
+                showScanner = false
+                
+                if !code.isEmpty {
+                    barcodeString = code
+                    segue = .addNewFidelityCardSegue
+                }
+            }
+        }
+        .onAppear(perform: loadFidelityCards)
     }
     
     private func goBack() {
         segue = .homeSegue
+    }
+    
+    private func loadFidelityCards() {
+        let db = Firestore.firestore()
+
+        db.collection("homes")
+          .document(homeId)
+          .getDocument { snapshot, error in
+              if let error = error {
+                  print("Error loading sharedCards: \(error.localizedDescription)")
+                  return
+              }
+
+              guard let data = snapshot?.data(),
+                    let sharedCards = data["sharedCards"] as? [[String: Any]] else {
+                  print("No cards found or invalid format.")
+                  return
+              }
+
+              DispatchQueue.main.async {
+                  self.cards = sharedCards.map {
+                      FidelityCardItem(
+                        backgroundColorHex: $0["colorHex"] as? String ?? "#FFFFFF",
+                        cardNumber: $0["cardNumber"] as? String ?? "Unknown",
+                        storeName: $0["storeName"] as? String ?? "Unknown"
+                      )
+                  }
+              }
+          }
     }
 }

@@ -12,4 +12,7 @@ enum Segues: String {
     case completeProfileSegue
     case fidelityCardsSegue
     case fidelityCardSegue
+    case addNewFidelityCardSegue
+    case editFidelityCardSegue
+    case cardPhotosSegue
 }

@@ -19,7 +19,7 @@ struct FidelityCardView: View {
         VStack {
             ZStack {
                 headerColor
-                    .frame(height: 30)
+                    .frame(height: 35)
                     .cornerRadius(15, corners: [.topLeft, .topRight])
 
                 GenericTextView(text: title, font: Fonts.semiBold.ofSize(14), textColor: .white)

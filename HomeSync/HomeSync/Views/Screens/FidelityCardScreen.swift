@@ -6,20 +6,23 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
 
 struct FidelityCardScreen: View {
     @Binding var segue: Segues
-    @Binding var cardName: String
-    @State private var isEditSheetPresented = false
+    @Binding var fidelityCard: FidelityCardItem
+    @Binding var navigateToHome: Bool
+    @Binding var homeId: String
+    @State private var showDeleteAlert = false
     
     var body: some View {
         VStack {
-            TopHeaderView(screenTitle: cardName, icons: [IconButton(iconName: "trash", iconAction: { print("Trash tapped") })], backAction: goBack)
+            TopHeaderView(screenTitle: fidelityCard.storeName, icons: [IconButton(iconName: "trash", iconAction: { showDeleteAlert = true })], backAction: goBack)
             VStack {
                 FidelityCardView(
-                    title: "Auchan",
-                    headerColor: .red,
-                    barcodeText: "A4583B14",
+                    title: fidelityCard.storeName,
+                    headerColor: Color(hex: fidelityCard.backgroundColorHex),
+                    barcodeText: fidelityCard.cardNumber,
                     height: 200,
                     width: 330
                 )
@@ -27,29 +30,65 @@ struct FidelityCardScreen: View {
                 Spacer()
                     .frame(height: 40)
                 
-                GenericActionTile(iconName: "pencil", title: "Edit card") {
-                    isEditSheetPresented = true
+                GenericActionTile(iconName: "pencil", title: .editCard) {
+                    segue = .editFidelityCardSegue
                 }
                 
                 Spacer()
                     .frame(height: 10)
                 
-                GenericActionTile(iconName: "camera", title: "Photos") {
-                    print("Photos tapped")
+                GenericActionTile(iconName: "camera", title: .photos) {
+                    segue = .cardPhotosSegue
                 }
                 
                 Spacer()
             }
             .padding(.horizontal, 30)
         }
-        .sheet(isPresented: $isEditSheetPresented) {
-            EditCardSheet(cardNumber: "12345678901234567890", storeName: "Auchan")
-                .presentationDetents([.medium]) // or [.fraction(0.4)] for custom height
-                .presentationDragIndicator(.visible)
+        .alert(String.deleteCard, isPresented: $showDeleteAlert) {
+            Button(String.deleteButton, role: .destructive, action: deleteCard)
+            Button(String.cancelButton, role: .cancel) {}
+        } message: {
+            Text(String.deleteCardQuestion)
         }
     }
     
     private func goBack() {
-        segue = .fidelityCardsSegue
+        segue = navigateToHome ? .homeSegue : .fidelityCardsSegue
+    }
+    
+    private func deleteCard() {
+        let db = Firestore.firestore()
+        let docRef = db.collection("homes").document(homeId)
+
+        docRef.getDocument { document, error in
+            guard let document = document, document.exists else {
+                print("Home document not found: \(error?.localizedDescription ?? "")")
+                return
+            }
+
+            let data = document.data() ?? [:]
+
+            // 1. Remove from cards array
+            var cards = data["sharedCards"] as? [[String: Any]] ?? []
+            cards.removeAll { $0["cardNumber"] as? String == fidelityCard.cardNumber }
+
+            // 2. Remove entry from sharedPhotos
+            var sharedPhotos = data["sharedPhotos"] as? [String: [String: String]] ?? [:]
+            sharedPhotos.removeValue(forKey: fidelityCard.cardNumber)
+
+            // 3. Save changes to Firestore
+            docRef.updateData([
+                "sharedCards": cards,
+                "sharedPhotos": sharedPhotos
+            ]) { err in
+                if let err = err {
+                    print("Failed to delete card: \(err)")
+                } else {
+                    print("Card and shared photos deleted successfully")
+                    goBack()
+                }
+            }
+        }
     }
 }

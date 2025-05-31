@@ -14,6 +14,8 @@ enum TextFieldInput {
     case firstName
     case lastName
     case homeName
+    case cardNumber
+    case storeName
 
     var placeholder: String {
         switch self {
@@ -23,6 +25,8 @@ enum TextFieldInput {
         case .firstName: return .enterFirstName
         case .lastName: return .enterLastName
         case .homeName: return .homeName
+        case .cardNumber: return .cardNumber
+        case .storeName: return .storeName
         }
     }
 
@@ -32,13 +36,13 @@ enum TextFieldInput {
         case .password: return "lock"
         case .confirmPassword: return "checkmark.circle"
         case .firstName, .lastName: return "person"
-        case .homeName: return ""
+        case .homeName, .cardNumber, .storeName: return ""
         }
     }
 
     var isSecure: Bool {
         switch self {
-        case .email, .firstName, .lastName, .homeName: return false
+        case .email, .firstName, .lastName, .homeName, .cardNumber, .storeName: return false
         case .password, .confirmPassword: return true
         }
     }

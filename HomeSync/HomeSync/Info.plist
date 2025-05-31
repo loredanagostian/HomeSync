@@ -36,5 +36,7 @@
         <string>Axiforma-SemiBold.otf</string>
         <string>Axiforma-Thin.otf</string>
     </array>
+	<key>NSCameraUsageDescription</key>
+	<string>This app uses the camera to scan fidelity cards.</string>
 </dict>
 </plist>

@@ -10,6 +10,7 @@
 		3A9640CC2DDA652000024116 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3A9640CB2DDA652000024116 /* FirebaseAuth */; };
 		3A9640CE2DDA652400024116 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 3A9640CD2DDA652400024116 /* FirebaseCore */; };
 		3A9640D52DDA81D100024116 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 3A9640D42DDA81D100024116 /* FirebaseFirestore */; };
+		3A9B5FC62DEB9815000B97A2 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 3A9B5FC52DEB9815000B97A2 /* FirebaseStorage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A9640CE2DDA652400024116 /* FirebaseCore in Frameworks */,
+				3A9B5FC62DEB9815000B97A2 /* FirebaseStorage in Frameworks */,
 				3A9640CC2DDA652000024116 /* FirebaseAuth in Frameworks */,
 				3A9640D52DDA81D100024116 /* FirebaseFirestore in Frameworks */,
 			);
@@ -98,6 +100,7 @@
 				3A9640CB2DDA652000024116 /* FirebaseAuth */,
 				3A9640CD2DDA652400024116 /* FirebaseCore */,
 				3A9640D42DDA81D100024116 /* FirebaseFirestore */,
+				3A9B5FC52DEB9815000B97A2 /* FirebaseStorage */,
 			);
 			productName = HomeSync;
 			productReference = 3A30E1E22DD152D30080F649 /* HomeSync.app */;
@@ -404,6 +407,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3A9640C92DDA645300024116 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		3A9B5FC52DEB9815000B97A2 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3A9640C92DDA645300024116 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
