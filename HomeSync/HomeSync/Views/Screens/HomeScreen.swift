@@ -24,6 +24,7 @@ struct HomeScreen: View {
     @State private var availableHomes: [HomeEntry] = []
     @State private var selectedHome: HomeEntry? = nil
     @State private var previewCards: [FidelityCardItem] = []
+    @State private var userName: String = ""
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -33,7 +34,7 @@ struct HomeScreen: View {
                         if let selected = selectedHome {
                             TopHeaderHomeView(
                                 isDropdownVisible: $isDropdownVisible,
-                                userName: "Lore Gostian",
+                                userName: userName,
                                 homeName: selected.name,
                                 selectedHomeCallback: { selectedHome = $0 }
                             )
@@ -59,7 +60,8 @@ struct HomeScreen: View {
                         }, set: { newValue in
                             self.selectedHome = newValue
                         }),
-                        isVisible: $isDropdownVisible
+                        isVisible: $isDropdownVisible,
+                        segue: $segue
                     )
                     .transition(.opacity.combined(with: .move(edge: .top)))
                     .zIndex(1)
@@ -68,6 +70,7 @@ struct HomeScreen: View {
         }
         .onAppear {
             fetchUserHomesAndFidelityCards()
+            userName = fetchCurrentUserUserName()
         }
         .onChange(of: selectedHome) {
             if let newHome = selectedHome {
@@ -108,6 +111,15 @@ struct HomeScreen: View {
             }
         }
         .padding(.horizontal)
+    }
+    
+    private func fetchCurrentUserUserName() -> String {
+        guard let userName = Auth.auth().currentUser?.displayName else {
+            print("User not authenticated")
+            return ""
+        }
+        
+        return userName
     }
     
     private func fetchUserHomesAndFidelityCards() {

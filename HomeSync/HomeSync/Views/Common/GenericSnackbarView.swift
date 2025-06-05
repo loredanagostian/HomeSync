@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GenericSnackbarView: View {
     var message: String
+    var color: Color = .red
 
     var body: some View {
         Text(message)
@@ -18,7 +19,7 @@ struct GenericSnackbarView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
-            .background(Color.red.opacity(0.9))
+            .background(color.opacity(0.9))
             .cornerRadius(10)
             .shadow(radius: 5)
             .frame(width: 350)

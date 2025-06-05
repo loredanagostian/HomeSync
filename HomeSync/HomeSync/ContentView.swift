@@ -55,6 +55,12 @@ struct ContentView: View {
                 
             case .cardPhotosSegue:
                 CardPhotosScreen(segue: $segue, fidelityCard: $fidelityCard, homeId: $homeId)
+                
+            case .editHomeSegue:
+                EditHomeScreen(segue: $segue, homeId: $homeId)
+                
+            case .homeMembersSegue:
+                HomeMembersScreen(segue: $segue, homeId: $homeId)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

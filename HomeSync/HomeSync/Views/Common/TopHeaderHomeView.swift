@@ -61,7 +61,9 @@ struct DropdownOverlay: View {
     @Binding var homes: [HomeEntry]
     @Binding var selectedHome: HomeEntry
     @Binding var isVisible: Bool
+    @Binding var segue: Segues
     @State private var isAddingNewHome = false
+    @State private var isEditingHome = false
     @State private var newHomeName = ""
 
     var body: some View {
@@ -109,14 +111,33 @@ struct DropdownOverlay: View {
                         }
                         
                         Button(action: {
+                            isEditingHome = true
+                            segue = .editHomeSegue
+                        }) {
+                            HStack(spacing: 12) {
+                                CircularIconButton(systemIconName: "pencil", action: {}, buttonColor: .appPurple)
+                                GenericTextView(text: .editHome, font: Fonts.medium.ofSize(16), textColor: .white)
+                                Spacer()
+                            }
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 12)
+                            .background(.appBlack)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        
+                        Rectangle()
+                            .fill(Color.appDark)
+                            .frame(height: 1)
+                        
+                        Button(action: {
                             isAddingNewHome = true
                         }) {
                             HStack(spacing: 12) {
                                 CircularIconButton(systemIconName: "plus", action: {}, buttonColor: .appPurple)
-                                GenericTextView(text: .addNewHome, font: Fonts.medium.ofSize(16), textColor: .appPurple)
+                                GenericTextView(text: .addNewHome, font: Fonts.medium.ofSize(16), textColor: .white)
                                 Spacer()
                             }
-                            .padding(.horizontal)
+                            .padding(.horizontal, 12)
                             .padding(.vertical, 12)
                             .background(.appBlack)
                         }

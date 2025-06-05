@@ -33,9 +33,21 @@
 "home" = "Home";
 "more" = "More";
 "add_new_home" = "Add a new home";
+"edit_home" = "Edit your current home";
 "home_name" = "Home name";
 "continue_button" = "Continue";
 "fidelity_cards" = "Fidelity Cards";
+
+// Edit Home Screen
+
+"edit_home_name" = "Edit your home name";
+"edit_home_name_success" = "Your home name was updated.";
+"edit_home_name_error" = "There was an error while updating home name. Try again.";
+"manage_members" = "Manage home members";
+"home_members" = "Home Members";
+"delete_home" = "Delete home";
+"delete_home_question" = "Are you sure you want to delete this home?";
+"delete_home_error" = "There was an error while deleting home. Try again.";
 
 // Fidelity Cards
 "scan_barcode" = "Scan your fidelity card barcode";

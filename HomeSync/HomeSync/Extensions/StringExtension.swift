@@ -37,9 +37,20 @@ extension String {
     static let home = "home".localized
     static let more = "more".localized
     static let addNewHome = "add_new_home".localized
+    static let editHome = "edit_home".localized
     static let homeName = "home_name".localized
     static let continueButton = "continue_button".localized
     static let fidelityCards = "fidelity_cards".localized
+    
+    // Edit Home Screen
+    static let editHomeName = "edit_home_name".localized
+    static let editHomeNameSuccess = "edit_home_name_success".localized
+    static let editHomeNameError = "edit_home_name_error".localized
+    static let manageMembers = "manage_members".localized
+    static let homeMembers = "home_members".localized
+    static let deleteHome = "delete_home".localized
+    static let deleteHomeQuestion = "delete_home_question".localized
+    static let deleteHomeError = "delete_home_error".localized
     
     // Fidelity Cards
     static let scanBarcode = "scan_barcode".localized
