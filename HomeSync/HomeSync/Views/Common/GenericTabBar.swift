@@ -8,16 +8,22 @@
 import SwiftUI
 
 struct GenericTabBar: View {
-    var selectedTab: Tab
-
+    @Binding var selectedTab: Tab
+    
     var body: some View {
         HStack {
             Spacer()
-            tabItem(icon: "arrow.left.arrow.right", label: .split, isSelected: selectedTab == .split)
+            Button(action: { selectedTab = .split }) {
+               tabItem(icon: "arrow.left.arrow.right", label: .split, isSelected: selectedTab == .split)
+            }
             Spacer()
-            tabItem(icon: "house", label: .home, isSelected: selectedTab == .home, color: .appPurple)
+            Button(action: { selectedTab = .home }) {
+               tabItem(icon: "house", label: .home, isSelected: selectedTab == .home)
+            }
             Spacer()
-            tabItem(icon: "ellipsis", label: .more, isSelected: selectedTab == .more)
+            Button(action: { selectedTab = .more }) {
+               tabItem(icon: "ellipsis", label: .more, isSelected: selectedTab == .more)
+            }
             Spacer()
         }
         .padding()
@@ -44,7 +50,7 @@ struct GenericTabBar: View {
         .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
     }
 
-    func tabItem(icon: String, label: String, isSelected: Bool, color: Color = .white) -> some View {
+    func tabItem(icon: String, label: String, isSelected: Bool) -> some View {
         VStack(spacing: 4) {
             Image(systemName: icon)
                 .font(Fonts.regular.ofSize(16))
@@ -54,7 +60,7 @@ struct GenericTabBar: View {
                 .font(isSelected ? Fonts.bold.ofSize(12) : Fonts.regular.ofSize(12))
                 .frame(height: 14)
         }
-        .foregroundColor(color.opacity(isSelected ? 1 : 0.7))
+        .foregroundColor(isSelected ? .appPurple : .white.opacity(0.7))
         .frame(maxWidth: .infinity)
     }
 }

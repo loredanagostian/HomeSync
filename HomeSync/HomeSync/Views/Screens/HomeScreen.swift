@@ -9,12 +9,6 @@ import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
 
-struct HomeEntry: Identifiable, Equatable {
-    let id: String
-    let name: String
-    let members: Int
-}
-
 struct HomeScreen: View {
     @Binding var segue: Segues
     @Binding var homeId: String
@@ -44,9 +38,6 @@ struct HomeScreen: View {
                     }
                 }
                 .padding(.top, 60)
-
-                GenericTabBar(selectedTab: .home)
-                    .padding(.bottom, 50)
             }
             .background(.appDark)
             .ignoresSafeArea(edges: .bottom)
@@ -89,13 +80,7 @@ struct HomeScreen: View {
 
     private func initSectionView(sectionTitle: String) -> some View {
         HStack {
-            HStack(alignment: .top, spacing: 15) {
-                GenericTextView(text: sectionTitle, font: Fonts.semiBold.ofSize(20), textColor: .white)
-//                Image(systemName: "pencil")
-//                    .resizable()
-//                    .frame(width: 18, height: 18)
-//                    .foregroundColor(.white)
-            }
+            GenericTextView(text: sectionTitle, font: Fonts.semiBold.ofSize(20), textColor: .white)
 
             Spacer()
 

@@ -48,6 +48,10 @@ extension String {
     static let editHomeNameError = "edit_home_name_error".localized
     static let manageMembers = "manage_members".localized
     static let homeMembers = "home_members".localized
+    static let addHomeMember = "add_home_member".localized
+    static let removeMember = "remove_member".localized
+    static let removeMemberQuestion = "remove_member_question".localized
+    static let removeMemberError = "remove_member_error".localized
     static let deleteHome = "delete_home".localized
     static let deleteHomeQuestion = "delete_home_question".localized
     static let deleteHomeError = "delete_home_error".localized

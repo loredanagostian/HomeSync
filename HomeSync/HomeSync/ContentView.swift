@@ -16,6 +16,8 @@ struct ContentView: View {
     @State var homeId: String = ""
     @State var fidelityCard: FidelityCardItem = FidelityCardItem(backgroundColorHex: "", cardNumber: "", storeName: "")
     @State var navigateToHome: Bool = false
+    @State var homeMembers: [HomeUser] = []
+    @State private var selectedTab: Tab = .home
     
     init() {
        if Auth.auth().currentUser != nil {
@@ -60,12 +62,33 @@ struct ContentView: View {
                 EditHomeScreen(segue: $segue, homeId: $homeId)
                 
             case .homeMembersSegue:
-                HomeMembersScreen(segue: $segue, homeId: $homeId)
+                HomeMembersScreen(segue: $segue, homeId: $homeId, homeMembers: $homeMembers)
+                
+            case .addHomeMemberSegue:
+                AddHomeMemberScreen(segue: $segue, homeId: $homeId, homeMembers: $homeMembers)
+                
+            case .moreSegue:
+                MoreScreen(segue: $segue)
+            }
+            
+            if segue == .homeSegue || segue == .moreSegue || segue == .fidelityCardsSegue {
+               GenericTabBar(selectedTab: $selectedTab)
+                   .padding(.bottom, 50)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appDark)
         .ignoresSafeArea()
+        .onChange(of: selectedTab) { _, newTab in
+            switch newTab {
+            case .home:
+                segue = .homeSegue
+            case .split:
+                segue = .fidelityCardsSegue
+            case .more:
+                segue = .moreSegue
+            }
+        }
     }
 }
 

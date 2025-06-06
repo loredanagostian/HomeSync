@@ -7,62 +7,49 @@
 
 import SwiftUI
 import FirebaseFirestore
-
-struct HomeUser: Identifiable {
-    let id: String
-    let fullName: String
-    let email: String
-}
+import FirebaseAuth
 
 struct HomeMembersScreen: View {
     @Binding var segue: Segues
     @Binding var homeId: String
+    @Binding var homeMembers: [HomeUser]
     
-    @State private var members: [HomeUser] = []
+    @State private var showDeleteAlert: Bool = false
+    @State private var showSnackbar: Bool = false
+    @State private var selectedUserIdToDelete: String?
     
     var body: some View {
         VStack {
            TopHeaderView(
                screenTitle: .homeMembers,
-               icons: [IconButton(iconName: "person.badge.plus", iconAction: {  })],
+               icons: [IconButton(iconName: "person.badge.plus", iconAction: { segue = .addHomeMemberSegue })],
                backAction: { segue = .editHomeSegue }
            )
            
-           if members.isEmpty {
-               Spacer()
-               Text("No members yet.")
-                   .foregroundColor(.gray)
-                   .padding()
-               Spacer()
-           } else {
-               ScrollView {
-                   LazyVStack(spacing: 16) {
-                       ForEach(members) { member in
-                           HomeMemberRow(member: member) {
-                               removeUserFromHome(userId: member.id)
-                           }
+         ScrollView {
+               LazyVStack(spacing: 16) {
+                   ForEach(homeMembers) { member in
+                       HomeMemberRow(member: member, buttonVisible: member.id != Auth.auth().currentUser!.uid, isRemove: true) {
+                           selectedUserIdToDelete = member.id
+                           showDeleteAlert = true
                        }
                    }
-                   .padding()
                }
+               .padding()
            }
         }
         .onAppear(perform: loadMembers)
-//        .overlay(snackbarView)
-//        .alert("\(String.deleteHome)?", isPresented: $showDeleteAlert) {
-//            Button(String.deleteButton, role: .destructive) {
-//                deleteHome { success in
-//                    if success {
-//                        segue = .homeSegue
-//                    } else {
-//                        showSnackbar(message: .deleteHomeError, color: .red)
-//                    }
-//                }
-//            }
-//            Button(String.cancelButton, role: .cancel) {}
-//        } message: {
-//            Text(String.deleteHomeQuestion)
-//        }
+        .overlay(snackbarView)
+        .alert(String.removeMember, isPresented: $showDeleteAlert) {
+            Button(String.deleteButton, role: .destructive) {
+                if let userId = selectedUserIdToDelete {
+                    removeUserFromHome(userId: userId)
+                }
+            }
+            Button(String.cancelButton, role: .cancel) {}
+        } message: {
+            Text(String.deleteHomeQuestion)
+        }
     }
     
     private func goBack() {
@@ -107,66 +94,54 @@ struct HomeMembersScreen: View {
             }
 
             group.notify(queue: .main) {
-                self.members = loadedMembers
+                self.homeMembers = loadedMembers
             }
         }
        
-       private func removeUserFromHome(userId: String) {
-           let db = Firestore.firestore()
-           let userRef = db.collection("homes").document(homeId).collection("users").document(userId)
-           
-           userRef.delete { error in
-               if let error = error {
-                   print("Error removing user: \(error.localizedDescription)")
-               } else {
-                   withAnimation {
-                       members.removeAll { $0.id == userId }
-                   }
-               }
-           }
-       }
-}
+    private func removeUserFromHome(userId: String) {
+        let db = Firestore.firestore()
+        let homeRef = db.collection("homes").document(homeId)
+        let userRef = db.collection("users").document(userId)
 
-struct HomeMemberRow: View {
-    let member: HomeUser
-    let onRemove: () -> Void
+        let batch = db.batch()
 
-    var body: some View {
-        HStack(spacing: 12) {
-            GenericTextView(
-                text: userInitials(from: member.fullName),
-                font: Fonts.medium.ofSize(20),
-                textColor: .white
-            )
-            .frame(width: 50, height: 50)
-            .background(.appPurple)
-            .clipShape(Circle())
+        // Remove user from home's usersId
+        batch.updateData([
+            "usersId": FieldValue.arrayRemove([userId])
+        ], forDocument: homeRef)
 
-            VStack(alignment: .leading) {
-                Text(member.fullName)
-                    .fontWeight(.semibold)
-                Text(member.email)
-                    .font(.caption)
-                    .foregroundColor(.gray)
-            }
+        // Remove home from user's homesId
+        batch.updateData([
+            "homesId": FieldValue.arrayRemove([homeId])
+        ], forDocument: userRef)
 
-            Spacer()
-
-            Button(action: onRemove) {
-                Text("Remove")
-                    .font(.subheadline)
-                    .foregroundColor(.primary)
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 6)
-                    .background(Color.gray.opacity(0.2))
-                    .clipShape(Capsule())
+        // Commit the batch
+        batch.commit { error in
+            if let error = error {
+                print("Error removing user from home: \(error.localizedDescription)")
+                showSnackbar = true
+            } else {
+                withAnimation {
+                    homeMembers.removeAll { $0.id == userId }
+                }
             }
         }
     }
     
-    private func userInitials(from name: String) -> String {
-        let components = name.components(separatedBy: " ")
-        let initials = components.prefix(2).compactMap { $0.first?.uppercased() }
-        return initials.joined()
+    private var snackbarView: some View {
+        VStack {
+            Spacer()
+            if showSnackbar {
+                GenericSnackbarView(message: .removeMemberError)
+                    .gesture(
+                        DragGesture(minimumDistance: 10)
+                            .onEnded { if $0.translation.height > 20 {
+                                withAnimation { showSnackbar = false }
+                            }}
+                    )
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .animation(.easeInOut(duration: 0.3), value: showSnackbar)
+            }
+        }
     }
 }

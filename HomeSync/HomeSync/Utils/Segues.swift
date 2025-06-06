@@ -17,4 +17,6 @@ enum Segues: String {
     case cardPhotosSegue
     case editHomeSegue
     case homeMembersSegue
+    case addHomeMemberSegue
+    case moreSegue
 }
