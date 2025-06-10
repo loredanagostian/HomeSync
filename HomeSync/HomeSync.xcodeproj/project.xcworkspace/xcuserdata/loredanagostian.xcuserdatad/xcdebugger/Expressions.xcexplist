@@ -11,6 +11,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "closure #1 in closure #1 in closure #1 in SettlementCardView.body.getter:SettlementCardView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "users">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in closure #1 in closure #1 in FidelityCardsScreen.loadFidelityCards():FidelityCardsScreen.swift">
          <PersistentStrings>
             <PersistentString
@@ -30,13 +38,13 @@
          contextName = "closure #1 in closure #1 in closure #1 in closure #1 in EditFidelityCardScreen.body.getter:EditFidelityCardScreen.swift">
          <PersistentStrings>
             <PersistentString
+               value = "selectedColorHex.lowercased()">
+            </PersistentString>
+            <PersistentString
                value = "fidelityCard">
             </PersistentString>
             <PersistentString
                value = "preset.hex.lowercased()">
-            </PersistentString>
-            <PersistentString
-               value = "selectedColorHex.lowercased()">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -53,6 +61,14 @@
          <PersistentStrings>
             <PersistentString
                value = "fidelityCard">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #2 in SplitScreen.body.getter:SplitScreen.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "homeMembers.count">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
