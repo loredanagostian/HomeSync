@@ -8,17 +8,28 @@
 import SwiftUI
 
 struct BalanceCardView: View {
-    var balance: Double = 23.75
-    var amountOwedToYou: Double = 180.25
-    var amountYouOwe: Double = 156.50
+    var amountOwedToYou: Double
+    var amountYouOwe: Double
+    
+    private var balance: Double {
+       amountOwedToYou - amountYouOwe
+    }
+
+    private var balanceText: String {
+       balance >= 0 ? .youOwned : .youOwe
+    }
+
+    private var balanceColor: Color {
+       balance >= 0 ? .green : .red
+    }
 
     var body: some View {
         VStack(spacing: 16) {
             GenericTextView(text: .yourBalance, font: Fonts.medium.ofSize(18), textColor: .white)
             
-            GenericTextView(text: "$\(String(format: "%.2f", balance))", font: Fonts.bold.ofSize(24), textColor: .green)
+            GenericTextView(text: "\(String(format: "%.2f", balance)) LEI", font: Fonts.bold.ofSize(24), textColor: balanceColor)
 
-            GenericTextView(text: balance >= 0 ? .youOwned : .youOwe, font: Fonts.medium.ofSize(14), textColor: .appBlack)
+            GenericTextView(text: balanceText, font: Fonts.medium.ofSize(14), textColor: .appBlack)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
                 .background(Color.white)
@@ -29,14 +40,14 @@ struct BalanceCardView: View {
                     Label(String.youGetBack, systemImage: "arrow.down.left")
                         .font(.subheadline)
                         .foregroundColor(.green)
-                    GenericTextView(text: "$\(String(format: "%.2f", amountOwedToYou))", font: Fonts.medium.ofSize(18), textColor: .green)
+                    GenericTextView(text: "\(String(format: "%.2f", amountOwedToYou)) LEI", font: Fonts.medium.ofSize(18), textColor: .green)
                 }
                 Spacer()
                 VStack {
                     Label(String.youOwe, systemImage: "arrow.up.right")
                         .font(.subheadline)
                         .foregroundColor(.red)
-                    GenericTextView(text: "$\(String(format: "%.2f", amountYouOwe))", font: Fonts.medium.ofSize(18), textColor: .red)
+                    GenericTextView(text: "\(String(format: "%.2f", amountYouOwe)) LEI", font: Fonts.medium.ofSize(18), textColor: .red)
                 }
             }
         }
@@ -49,6 +60,6 @@ struct BalanceCardView: View {
 
 struct BalanceCardView_Previews: PreviewProvider {
     static var previews: some View {
-        BalanceCardView()
+        BalanceCardView(amountOwedToYou: 0, amountYouOwe: 0)
     }
 }

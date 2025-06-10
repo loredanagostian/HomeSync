@@ -15,12 +15,14 @@ struct HomeScreen: View {
     @Binding var fidelityCard: FidelityCardItem
     @Binding var navigateToHome: Bool
     @Binding var selectedTab: Tab
+    @Binding var homeMembers: [HomeUser]
     @State private var isDropdownVisible = false
     @State private var availableHomes: [HomeEntry] = []
     @State private var selectedHome: HomeEntry? = nil
     @State private var previewCards: [FidelityCardItem] = []
     @State private var userName: String = ""
-    @State private var homeUsers: [HomeUser] = []
+    @State private var settlementExpenses: [[String: Any]] = []
+    @State private var settlementAmount: Double = 0.0
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -74,10 +76,11 @@ struct HomeScreen: View {
                 homeId = newHome.id
                 fetchPreviewSharedCards(for: newHome.id)
                 loadMembers()
+                fetchSettlement(for: newHome.id)
             } else {
                 homeId = ""
                 previewCards = []
-                homeUsers = []
+                homeMembers = []
             }
         }
     }
@@ -92,7 +95,11 @@ struct HomeScreen: View {
     private func initSettlementSection() -> some View {
         VStack(alignment: .leading, spacing: 20) {
             initSectionView(sectionTitle: .settlement, isMoreVisible: false)
-            SettlementCardView(users: $homeUsers, onViewDetailsPressed: { selectedTab = .split })
+            SettlementCardView(
+                users: $homeMembers,
+                expenses: settlementExpenses,
+                onViewDetailsPressed: { selectedTab = .split }
+            )
         }
     }
 
@@ -232,7 +239,25 @@ struct HomeScreen: View {
         }
 
         group.notify(queue: .main) {
-            self.homeUsers = loadedMembers
+            self.homeMembers = loadedMembers
+        }
+    }
+    
+    private func fetchSettlement(for homeId: String) {
+        let db = Firestore.firestore()
+        db.collection("homes").document(homeId).getDocument { snapshot, error in
+            guard let data = snapshot?.data(), error == nil else {
+                print("Error fetching settlement: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+
+            if let settlement = data["settlement"] as? [String: Any] {
+                self.settlementExpenses = settlement["expenses"] as? [[String: Any]] ?? []
+                self.settlementAmount = settlement["settlementAmount"] as? Double ?? 0.0
+            } else {
+                self.settlementExpenses = []
+                self.settlementAmount = 0.0
+            }
         }
     }
 }

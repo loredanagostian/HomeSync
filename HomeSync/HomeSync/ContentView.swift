@@ -38,7 +38,7 @@ struct ContentView: View {
                 RegisterScreen(segue: $segue)
                 
             case .homeSegue:
-                HomeScreen(segue: $segue, homeId: $homeId, fidelityCard: $fidelityCard, navigateToHome: $navigateToHome, selectedTab: $selectedTab)
+                HomeScreen(segue: $segue, homeId: $homeId, fidelityCard: $fidelityCard, navigateToHome: $navigateToHome, selectedTab: $selectedTab, homeMembers: $homeMembers)
                 
             case .completeProfileSegue:
                 CompleteProfileScreen(segue: $segue)
@@ -71,7 +71,7 @@ struct ContentView: View {
                 MoreScreen(segue: $segue)
                 
             case .splitSegue:
-                SplitScreen()
+                SplitScreen(homeId: $homeId, homeMembers: $homeMembers)
             }
             
             if segue == .homeSegue || segue == .moreSegue || segue == .splitSegue {

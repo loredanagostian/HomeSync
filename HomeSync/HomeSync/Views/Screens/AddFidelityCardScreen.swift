@@ -53,6 +53,7 @@ struct AddFidelityCardScreen: View {
                 }
                 .padding()
             }
+            .padding()
             
             Spacer()
 
