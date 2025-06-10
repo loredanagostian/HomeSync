@@ -19,4 +19,5 @@ enum Segues: String {
     case homeMembersSegue
     case addHomeMemberSegue
     case moreSegue
+    case splitSegue
 }

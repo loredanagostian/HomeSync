@@ -57,46 +57,46 @@ struct HomeMembersScreen: View {
     }
        
     private func loadMembers() {
-            let db = Firestore.firestore()
-            db.collection("homes").document(homeId).getDocument { snapshot, error in
-                guard let data = snapshot?.data(), error == nil else {
-                    print("Failed to fetch home: \(error?.localizedDescription ?? "Unknown error")")
-                    return
-                }
-
-                guard let usersId = data["usersId"] as? [String] else {
-                    print("No usersId found in home")
-                    return
-                }
-
-                fetchUsersDetails(userIds: usersId)
+        let db = Firestore.firestore()
+        db.collection("homes").document(homeId).getDocument { snapshot, error in
+            guard let data = snapshot?.data(), error == nil else {
+                print("Failed to fetch home: \(error?.localizedDescription ?? "Unknown error")")
+                return
             }
+
+            guard let usersId = data["usersId"] as? [String] else {
+                print("No usersId found in home")
+                return
+            }
+
+            fetchUsersDetails(userIds: usersId)
         }
+    }
     
     private func fetchUsersDetails(userIds: [String]) {
-            let db = Firestore.firestore()
-            var loadedMembers: [HomeUser] = []
-            let group = DispatchGroup()
+        let db = Firestore.firestore()
+        var loadedMembers: [HomeUser] = []
+        let group = DispatchGroup()
 
-            for userId in userIds {
-                group.enter()
-                db.collection("users").document(userId).getDocument { doc, _ in
-                    defer { group.leave() }
+        for userId in userIds {
+            group.enter()
+            db.collection("users").document(userId).getDocument { doc, _ in
+                defer { group.leave() }
 
-                    if let doc = doc, let data = doc.data(),
-                       let first = data["firstName"] as? String,
-                       let last = data["lastName"] as? String,
-                       let email = data["email"] as? String {
-                        let user = HomeUser(id: userId, fullName: "\(first) \(last)", email: email)
-                        loadedMembers.append(user)
-                    }
+                if let doc = doc, let data = doc.data(),
+                   let first = data["firstName"] as? String,
+                   let last = data["lastName"] as? String,
+                   let email = data["email"] as? String {
+                    let user = HomeUser(id: userId, fullName: "\(first) \(last)", email: email)
+                    loadedMembers.append(user)
                 }
             }
-
-            group.notify(queue: .main) {
-                self.homeMembers = loadedMembers
-            }
         }
+
+        group.notify(queue: .main) {
+            self.homeMembers = loadedMembers
+        }
+    }
        
     private func removeUserFromHome(userId: String) {
         let db = Firestore.firestore()

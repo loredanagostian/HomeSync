@@ -37,6 +37,11 @@
 "home_name" = "Home name";
 "continue_button" = "Continue";
 "fidelity_cards" = "Fidelity Cards";
+"settlement" = "Settlement";
+"you_owned" = "You're owned";
+"you_own" = "You own";
+"view_details" = "View details";
+"settle_up" = "Settle up";
 
 // Edit Home Screen
 
@@ -73,6 +78,12 @@
 "delete_card_question" = "Are you sure you want to remove this card from your shared cards?";
 "delete_photo" = "Delete photo?";
 "delete_photo_question" = "Are you sure you want to remove this photo from your card?";
+
+// More
+"profile" = "Profile";
+"save_changes" = "Save changes";
+"logout" = "Log out";
+"logout_question" = "Are you sure you want to logout?";
 
 // Error Messages
 "empty_fields" = "Fields cannot be empty";

@@ -14,11 +14,13 @@ struct HomeScreen: View {
     @Binding var homeId: String
     @Binding var fidelityCard: FidelityCardItem
     @Binding var navigateToHome: Bool
+    @Binding var selectedTab: Tab
     @State private var isDropdownVisible = false
     @State private var availableHomes: [HomeEntry] = []
     @State private var selectedHome: HomeEntry? = nil
     @State private var previewCards: [FidelityCardItem] = []
     @State private var userName: String = ""
+    @State private var homeUsers: [HomeUser] = []
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -34,7 +36,11 @@ struct HomeScreen: View {
                             )
                         }
 
-                        self.initFidelityCardsSection()
+                        if !previewCards.isEmpty {
+                            self.initFidelityCardsSection()
+                        }
+                        
+                        initSettlementSection()
                     }
                 }
                 .padding(.top, 60)
@@ -67,6 +73,11 @@ struct HomeScreen: View {
             if let newHome = selectedHome {
                 homeId = newHome.id
                 fetchPreviewSharedCards(for: newHome.id)
+                loadMembers()
+            } else {
+                homeId = ""
+                previewCards = []
+                homeUsers = []
             }
         }
     }
@@ -75,6 +86,13 @@ struct HomeScreen: View {
         VStack(alignment: .leading, spacing: 20) {
             initSectionView(sectionTitle: .fidelityCards)
             FidelityCardsListView(cards: $previewCards, fidelityCard: $fidelityCard, segue: $segue, navigateToHome: $navigateToHome)
+        }
+    }
+    
+    private func initSettlementSection() -> some View {
+        VStack(alignment: .leading, spacing: 20) {
+            initSectionView(sectionTitle: .settlement)
+            SettlementCardView(users: $homeUsers, onViewDetailsPressed: { selectedTab = .split })
         }
     }
 
@@ -143,7 +161,7 @@ struct HomeScreen: View {
                     
                     fetchPreviewSharedCards(for: homeId)
                 }
-            }
+            }        
     }
     
     private func fetchPreviewSharedCards(for homeId: String) {
@@ -174,4 +192,45 @@ struct HomeScreen: View {
             }
     }
 
+    private func loadMembers() {
+        let db = Firestore.firestore()
+        db.collection("homes").document(homeId).getDocument { snapshot, error in
+            guard let data = snapshot?.data(), error == nil else {
+                print("Failed to fetch home: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+
+            guard let usersId = data["usersId"] as? [String] else {
+                print("No usersId found in home")
+                return
+            }
+
+            fetchUsersDetails(userIds: usersId)
+        }
+    }
+    
+    private func fetchUsersDetails(userIds: [String]) {
+        let db = Firestore.firestore()
+        var loadedMembers: [HomeUser] = []
+        let group = DispatchGroup()
+
+        for userId in userIds {
+            group.enter()
+            db.collection("users").document(userId).getDocument { doc, _ in
+                defer { group.leave() }
+
+                if let doc = doc, let data = doc.data(),
+                   let first = data["firstName"] as? String,
+                   let last = data["lastName"] as? String,
+                   let email = data["email"] as? String {
+                    let user = HomeUser(id: userId, fullName: "\(first) \(last)", email: email)
+                    loadedMembers.append(user)
+                }
+            }
+        }
+
+        group.notify(queue: .main) {
+            self.homeUsers = loadedMembers
+        }
+    }
 }

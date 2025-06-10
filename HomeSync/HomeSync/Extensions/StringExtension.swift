@@ -41,6 +41,11 @@ extension String {
     static let homeName = "home_name".localized
     static let continueButton = "continue_button".localized
     static let fidelityCards = "fidelity_cards".localized
+    static let settlement = "settlement".localized
+    static let youOwned = "you_owned".localized
+    static let youOwn = "you_own".localized
+    static let viewDetails = "view_details".localized
+    static let settleUp = "settle_up".localized
     
     // Edit Home Screen
     static let editHomeName = "edit_home_name".localized
@@ -76,6 +81,12 @@ extension String {
     static let deleteCardQuestion = "delete_card_question".localized
     static let deletePhoto = "delete_photo".localized
     static let deletePhotoQuestion = "delete_photo_question".localized
+    
+    // More
+    static let profile = "profile".localized
+    static let saveChanges = "save_changes".localized
+    static let logout = "logout".localized
+    static let logoutQuestion = "logout_question".localized
     
     // Error Messages
     static let emptyFields = "empty_fields".localized

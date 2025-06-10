@@ -7,23 +7,21 @@
 
 import SwiftUI
 
-struct IconButton {
-    let iconName: String
-    let iconAction: () -> Void
-}
-
 struct TopHeaderView: View {
     var screenTitle: String
     var icons: [IconButton]
     var backAction: () -> Void
+    var backIconVisible: Bool = true
 
     var body: some View {
         ZStack {
             HStack {
-                Button(action: backAction) {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(.white)
-                        .font(.system(size: 18, weight: .medium))
+                if backIconVisible {
+                    Button(action: backAction) {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.white)
+                            .font(.system(size: 18, weight: .medium))
+                    }
                 }
 
                 Spacer()
@@ -32,7 +30,7 @@ struct TopHeaderView: View {
                     ForEach(icons, id: \.iconName) { icon in
                         Button(action: icon.iconAction) {
                             Image(systemName: icon.iconName)
-                                .foregroundColor(.white)
+                                .foregroundColor(icon.iconColor)
                                 .font(.system(size: 20))
                         }
                     }

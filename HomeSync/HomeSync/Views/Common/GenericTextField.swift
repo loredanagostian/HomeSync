@@ -11,6 +11,7 @@ struct GenericTextField: View {
     var inputType: TextFieldInput
     @State private var isSecureVisible: Bool = false
     @Binding var text: String
+    var textColor: Color = .white
        
     var body: some View {
        HStack {
@@ -22,6 +23,7 @@ struct GenericTextField: View {
                    SecureField(LocalizedStringKey(inputType.placeholder), text: $text)
                } else {
                    TextField(LocalizedStringKey(inputType.placeholder), text: $text)
+                       .foregroundColor(textColor)
                }
            }
            .font(Fonts.regular.ofSize(15))

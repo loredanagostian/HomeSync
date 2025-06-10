@@ -38,7 +38,7 @@ struct ContentView: View {
                 RegisterScreen(segue: $segue)
                 
             case .homeSegue:
-                HomeScreen(segue: $segue, homeId: $homeId, fidelityCard: $fidelityCard, navigateToHome: $navigateToHome)
+                HomeScreen(segue: $segue, homeId: $homeId, fidelityCard: $fidelityCard, navigateToHome: $navigateToHome, selectedTab: $selectedTab)
                 
             case .completeProfileSegue:
                 CompleteProfileScreen(segue: $segue)
@@ -69,9 +69,12 @@ struct ContentView: View {
                 
             case .moreSegue:
                 MoreScreen(segue: $segue)
+                
+            case .splitSegue:
+                SplitScreen()
             }
             
-            if segue == .homeSegue || segue == .moreSegue || segue == .fidelityCardsSegue {
+            if segue == .homeSegue || segue == .moreSegue || segue == .splitSegue {
                GenericTabBar(selectedTab: $selectedTab)
                    .padding(.bottom, 50)
             }
@@ -84,7 +87,7 @@ struct ContentView: View {
             case .home:
                 segue = .homeSegue
             case .split:
-                segue = .fidelityCardsSegue
+                segue = .splitSegue
             case .more:
                 segue = .moreSegue
             }

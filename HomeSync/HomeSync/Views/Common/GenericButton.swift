@@ -10,6 +10,7 @@ import SwiftUI
 struct GenericButton: View {
     var title: String
     var action: () -> Void
+    var isArrowVisible: Bool = true
 
     var body: some View {
         Button(action: action) {
@@ -22,13 +23,15 @@ struct GenericButton: View {
                     .font(Fonts.bold.ofSize(16))
                     .foregroundColor(.white)
 
-                HStack {
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .foregroundColor(.white)
-                        .padding(.trailing, 16)
+                if isArrowVisible {
+                    HStack {
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.white)
+                            .padding(.trailing, 16)
+                    }
+                    .frame(height: 60)
                 }
-                .frame(height: 60)
             }
         }
         .frame(width: 350)
