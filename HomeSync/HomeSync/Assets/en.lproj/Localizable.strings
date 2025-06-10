@@ -38,7 +38,7 @@
 "continue_button" = "Continue";
 "fidelity_cards" = "Fidelity Cards";
 "settlement" = "Settlement";
-"you_owned" = "You're owned";
+"you_owned" = "You are owned";
 "you_own" = "You own";
 "view_details" = "View details";
 "settle_up" = "Settle up";
@@ -84,6 +84,17 @@
 "save_changes" = "Save changes";
 "logout" = "Log out";
 "logout_question" = "Are you sure you want to logout?";
+
+// Split
+"your_balance" = "Your balance";
+"you_get_back" = "You get back";
+"you_owe" = "You owe";
+"recent_expenses" = "Recent expenses";
+"mark_as_paid" = "Mark as paid";
+"add_expense" = "Add Expense";
+"expense_details" = "Expense details";
+"expense_name" = "Expense name";
+"total_price" = "Total price";
 
 // Error Messages
 "empty_fields" = "Fields cannot be empty";

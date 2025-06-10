@@ -88,6 +88,17 @@ extension String {
     static let logout = "logout".localized
     static let logoutQuestion = "logout_question".localized
     
+    // Split
+    static let yourBalance = "your_balance".localized
+    static let youGetBack = "you_get_back".localized
+    static let youOwe = "you_owe".localized
+    static let recentExpenses = "recent_expenses".localized
+    static let markAsPaid = "mark_as_paid".localized
+    static let addExpense = "add_expense".localized
+    static let expenseDetails = "expense_details".localized
+    static let expenseName = "expense_name".localized
+    static let totalPrice = "total_price".localized
+    
     // Error Messages
     static let emptyFields = "empty_fields".localized
     static let passwordsNotMatch = "passwords_not_match".localized

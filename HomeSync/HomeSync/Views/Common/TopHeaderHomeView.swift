@@ -40,11 +40,6 @@ struct TopHeaderHomeView: View {
                     .clipShape(Circle())
 
                 Spacer()
-
-                HStack(spacing: 12) {
-                    CircularIconButton(systemIconName: "square.grid.2x2") {}
-                    CircularIconButton(systemIconName: "bell.badge") {}
-                }
             }
         }
         .padding(.horizontal)

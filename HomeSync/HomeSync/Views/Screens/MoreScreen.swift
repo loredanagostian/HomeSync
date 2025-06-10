@@ -24,13 +24,14 @@ struct MoreScreen: View {
     var body: some View {
         VStack {
             TopHeaderView(screenTitle: .more, icons: [IconButton(iconName: "rectangle.portrait.and.arrow.forward", iconAction: { showLogoutAlert = true }, iconColor: .red)], backAction: {}, backIconVisible: false)
+            
             VStack {
                 if isLoading {
                     ProgressView()
                         .padding()
                 } else {
                     HStack {
-                        GenericTextView(text: .profile.uppercased(), font: Fonts.bold.ofSize(14), textColor: .white.opacity(0.7))
+                        GenericTextView(text: .profile, font: Fonts.semiBold.ofSize(20), textColor: .white)
                         Spacer()
                     }
                     .padding(.bottom)

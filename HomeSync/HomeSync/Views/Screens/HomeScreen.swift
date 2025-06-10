@@ -91,26 +91,28 @@ struct HomeScreen: View {
     
     private func initSettlementSection() -> some View {
         VStack(alignment: .leading, spacing: 20) {
-            initSectionView(sectionTitle: .settlement)
+            initSectionView(sectionTitle: .settlement, isMoreVisible: false)
             SettlementCardView(users: $homeUsers, onViewDetailsPressed: { selectedTab = .split })
         }
     }
 
-    private func initSectionView(sectionTitle: String) -> some View {
+    private func initSectionView(sectionTitle: String, isMoreVisible: Bool = true) -> some View {
         HStack {
             GenericTextView(text: sectionTitle, font: Fonts.semiBold.ofSize(20), textColor: .white)
 
             Spacer()
 
-            HStack(spacing: 4) {
-                GenericTextView(text: .more, font: Fonts.regular.ofSize(16), textColor: .white)
-                Image(systemName: "arrow.right.circle")
-                    .resizable()
-                    .frame(width: 16, height: 16)
-                    .foregroundColor(.white)
-            }
-            .onTapGesture {
-                segue = .fidelityCardsSegue
+            if isMoreVisible {
+                HStack(spacing: 4) {
+                    GenericTextView(text: .more, font: Fonts.regular.ofSize(16), textColor: .white)
+                    Image(systemName: "arrow.right.circle")
+                        .resizable()
+                        .frame(width: 16, height: 16)
+                        .foregroundColor(.white)
+                }
+                .onTapGesture {
+                    segue = .fidelityCardsSegue
+                }
             }
         }
         .padding(.horizontal)
