@@ -11,6 +11,7 @@ import FirebaseFirestore
 
 struct CompleteProfileScreen: View {
     @Binding var segue: Segues
+    @Binding var selectedTab: Tab
     @State private var firstName: String = ""
     @State private var lastName: String = ""
     @State private var showSnackbar: Bool = false
@@ -125,7 +126,9 @@ struct CompleteProfileScreen: View {
                     if let error = error {
                         print("Error updating user homesId: \(error.localizedDescription)")
                     }
+                    
                     segue = .homeSegue
+                    selectedTab = .home
                 }
             }
         }

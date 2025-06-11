@@ -10,6 +10,7 @@ import SwiftUI
 struct LoginScreen: View {
     @EnvironmentObject var authService: AuthService
     @Binding var segue: Segues
+    @Binding var selectedTab: Tab
     @State private var email = ""
     @State private var password = ""
     @State private var showSnackbar = false
@@ -84,6 +85,7 @@ struct LoginScreen: View {
         authService.signIn(email: email, password: password) { success in
           if success {
               segue = .homeSegue
+              selectedTab = .home
           } else {
               withAnimation {
                   showSnackbar = true

@@ -20,18 +20,18 @@ struct ContentView: View {
     @State private var selectedTab: Tab = .home
     
     init() {
-       if Auth.auth().currentUser != nil {
-           _segue = State(initialValue: .homeSegue)
-       } else {
-           _segue = State(initialValue: .loginSegue)
-       }
+        if Auth.auth().currentUser != nil {
+            _segue = State(initialValue: .homeSegue)
+        } else {
+            _segue = State(initialValue: .loginSegue)
+        }
     }
 
     var body: some View {
         VStack(alignment: .leading) {
             switch segue {
             case .loginSegue:
-                LoginScreen(segue: $segue)
+                LoginScreen(segue: $segue, selectedTab: $selectedTab)
                     .environmentObject(authService)
                 
             case .registerSegue:
@@ -41,7 +41,7 @@ struct ContentView: View {
                 HomeScreen(segue: $segue, homeId: $homeId, fidelityCard: $fidelityCard, navigateToHome: $navigateToHome, selectedTab: $selectedTab, homeMembers: $homeMembers)
                 
             case .completeProfileSegue:
-                CompleteProfileScreen(segue: $segue)
+                CompleteProfileScreen(segue: $segue, selectedTab: $selectedTab)
                 
             case .fidelityCardsSegue:
                 FidelityCardsScreen(segue: $segue, barcodeString: $barcodeString, homeId: $homeId, fidelityCard: $fidelityCard, navigateToHome: $navigateToHome)
